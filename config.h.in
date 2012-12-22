@@ -9,6 +9,9 @@
 /* Define to 1 if you have the `fl' library (-lfl). */
 #undef HAVE_LIBFL
 
+/* Define to 1 if you have the <lua5.1/lua.h> header file. */
+#undef HAVE_LUA5_1_LUA_H
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
