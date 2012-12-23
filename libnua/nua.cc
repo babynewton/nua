@@ -48,7 +48,8 @@ static int matrix_gc(lua_State* L){
 }
 
 static int matrix_tostring(lua_State* L){
-	return 0;
+	lua_pushstring(L, "matrix");
+	return 1;
 }
 
 static int matrix_get_at(lua_State* L){
@@ -82,8 +83,8 @@ static const luaL_Reg matrix_lib[] = {
 	{"__mul", matrix_scalar_product},
 	{"__gc", matrix_gc},
 	{"__tostring", matrix_tostring},
-	{"__index", matrix_get_at},
-	{"__newindex", matrix_set_at},
+//	{"__index", matrix_get_at},
+//	{"__newindex", matrix_set_at},
 	{NULL, NULL}
 };
 

@@ -17,4 +17,4 @@ a:set(1,2,3)
 --It's a simple matrix operation
 local b = x * a
 --b is supposed to be [14, 32, 56]
-print ("b[]="..b)
+print (b)
