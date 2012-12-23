@@ -1,4 +1,4 @@
-require "nua"
+require "libnua"
 
 --Creating new matrix with a dimension of 3
 local x = algebra.matrix(3,3)
@@ -17,6 +17,4 @@ a:set(1,2,3)
 --It's a simple matrix operation
 local b = x * a
 --b is supposed to be [14, 32, 56]
-for i,v in ipairs(b) do
-	print "b["..i.."]="..v
-end
+print ("b[]="..b)
