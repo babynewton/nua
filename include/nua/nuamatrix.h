@@ -1,5 +1,5 @@
-#ifndef __NUA_MATRIX_H__
-#define __NUA_MATRIX_H__
+#ifndef __NUAC_MATRIX_H__
+#define __NUAC_MATRIX_H__
 
 template <class T> class nuaMatrix{
 	private:
@@ -34,4 +34,4 @@ template <class T> class nuaMatrixFactory{
 		return ret;
 	}
 };
-#endif //__NUA_MATRIX_H__
+#endif //__NUAC_MATRIX_H__
