@@ -1,6 +1,10 @@
+#include <string>
+#include <sstream>
 #include <lua5.1/lua.h>
 #include <lua5.1/lauxlib.h>
 #include "nua/nua.h"
+
+using namespace std;
 
 #define LUA_NUAMATRIX "nuaMatrix*"
 
@@ -48,7 +52,28 @@ static int matrix_gc(lua_State* L){
 }
 
 static int matrix_tostring(lua_State* L){
-	lua_pushstring(L, "matrix");
+	nuaMatrix<double>** val = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*val) {
+		lua_pushnil(L);
+		lua_pushstring(L, "It is not a matrix");
+		return 2;
+	}
+	if((*val)->cols() == 0 || (*val)->rows() == 0){
+		lua_pushstring(L, "empty");
+		return 1;
+	}
+	string str;
+	stringstream ss;
+	for(int j = 0 ; j < (*val)->cols() ; j++){
+		for(int i = 0 ; i < (*val)->rows() ; i++){
+			if (i != 0) ss <<  ", ";
+			else ss << "[ ";
+			ss << (**val)[i][j];
+			if (i == (*val)->rows() - 1) ss << " ]" << endl;
+		}
+	}
+	ss >> str;
+	lua_pushstring(L, str.c_str());
 	return 1;
 }
 

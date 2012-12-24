@@ -13,12 +13,16 @@ template <class T> class nuaMatrix{
 			m_rows(0),
 			m_cols(0)
 		{}
+
 		nuaMatrix(const int _rows, const int _cols):
 			m_rows(_rows),
 			m_cols(_cols)
 		{}
-
-
+	
+		const T* operator [](const int index){
+			if(index >= m_rows) return NULL;
+			return val[index];
+		}
 };
 template <class T> class nuaMatrixFactory{
 	public:
