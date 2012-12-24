@@ -4,8 +4,7 @@
 
 extern "C" {
 LUALIB_API int luaopen_libnua(lua_State* L){
-	createmeta(L);
-	luaL_register(L, "algebra", algebralib);
+	matrix_init(L);
 	return 1;
 }
 }

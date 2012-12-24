@@ -102,3 +102,7 @@ static void createmeta(lua_State* L){
 	luaL_register(L, NULL, matrix_lib);
 }
 
+void matrix_init(lua_State* L){
+	createmeta(L);
+	luaL_register(L, "algebra", algebralib);
+}
