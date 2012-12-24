@@ -17,13 +17,19 @@ template <class T> class nuaMatrix{
 		nuaMatrix(const int _rows, const int _cols):
 			m_rows(_rows),
 			m_cols(_cols)
-		{}
+		{
+			if(!m_rows || !m_cols) return;
+			val = new T*[m_rows];
+			for(int i = 0 ; i < m_rows ; i++)
+				val[i] = new T[m_cols];
+		}
 	
-		const T* operator [](const int index){
+		T* operator [](const int index){
 			if(index >= m_rows) return NULL;
 			return val[index];
 		}
 };
+
 template <class T> class nuaMatrixFactory{
 	public:
 	static nuaMatrix<T>* create(const int rows, const int cols){

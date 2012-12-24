@@ -18,14 +18,28 @@ static int newmatrix(lua_State* L,
 	*matrix = (val) ? val : nuaMatrixFactory<double>::create(rows, cols);
 	if(!*matrix){
 		lua_pushnil(L);
-		lua_pushstring(L, "Can't allocate a matrix with given dimension o");
+		lua_pushstring(L, "Can't allocate a matrix with given dimension");
 		return 2;
 	}
 	return 1;
 }
 
-static int matrix_set(lua_State* L){
-	return 0;
+static int matrix_dump(lua_State* L){
+	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	const int args = lua_gettop(L);
+	if ((args - 1) != ((*matrix)->rows() * (*matrix)->cols())) {
+		lua_pushboolean(L, false);
+		lua_pushstring(L, "The number of arguments doesn't match the dimension of the matrix");
+		return 2;
+	}
+	int index = 2;
+	for(int i = 0 ; i < (*matrix)->rows() ; i++){
+		for(int j = 0 ; j < (*matrix)->cols() ; j++){
+			(**matrix)[i][j] = luaL_checknumber(L, index++);
+		}
+	}
+	lua_pushboolean(L, true);
+	return 1;
 }
 
 static int matrix_scalar_product(lua_State* L){
@@ -35,7 +49,7 @@ static int matrix_scalar_product(lua_State* L){
 		lua_pushstring(L, "l-value is not a matrix");
 		return 2;
 	}
-	nuaMatrix<double>** rval = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	nuaMatrix<double>** rval = (nuaMatrix<double>**)luaL_checkudata(L, 2, LUA_NUAMATRIX);
 	if(!*rval) {
 		lua_pushnil(L);
 		lua_pushstring(L, "r-value is not a matrix");
@@ -64,15 +78,19 @@ static int matrix_tostring(lua_State* L){
 	}
 	string str;
 	stringstream ss;
-	for(int j = 0 ; j < (*val)->cols() ; j++){
-		for(int i = 0 ; i < (*val)->rows() ; i++){
-			if (i != 0) ss <<  ", ";
-			else ss << "[ ";
+//	ss << "dimension" << (*val)->rows() << ":" << (*val)->cols() << endl;
+	for(int i = 0 ; i < (*val)->rows() ; i++){
+		for(int j = 0 ; j < (*val)->cols() ; j++){
+			if (j != 0) {
+				ss <<  ", ";
+			} else {
+				ss << "[ ";
+			}
 			ss << (**val)[i][j];
-			if (i == (*val)->rows() - 1) ss << " ]" << endl;
+			if (j == ((*val)->cols() - 1)) ss << " ]" << endl;
 		}
 	}
-	ss >> str;
+	str = ss.str();
 	lua_pushstring(L, str.c_str());
 	return 1;
 }
@@ -104,12 +122,12 @@ static int vector_new_row(lua_State* L){
 }
 
 static const luaL_Reg matrix_lib[] = {
-	{"set", matrix_set},
+	{"dump", matrix_dump},
 	{"__mul", matrix_scalar_product},
 	{"__gc", matrix_gc},
 	{"__tostring", matrix_tostring},
 //	{"__index", matrix_get_at},
-//	{"__newindex", matrix_set_at},
+	{"__newindex", matrix_set_at},
 	{NULL, NULL}
 };
 
@@ -120,14 +138,10 @@ static const luaL_Reg algebralib[] = {
 	{NULL, NULL}
 };
 
-static void createmeta(lua_State* L){
+void matrix_init(lua_State* L){
 	luaL_newmetatable(L, LUA_NUAMATRIX);
 	lua_pushvalue(L, -1);
-	lua_setfield(L, -1, "__index");
+	lua_setfield(L, -2, "__index");
 	luaL_register(L, NULL, matrix_lib);
-}
-
-void matrix_init(lua_State* L){
-	createmeta(L);
 	luaL_register(L, "algebra", algebralib);
 }
