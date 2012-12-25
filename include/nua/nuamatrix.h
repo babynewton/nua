@@ -12,6 +12,7 @@ template <class T> class nuaMatrix{
 		const int rows(){return m_rows;}
 		const int cols(){return m_cols;}
 		nuaMatrix();
+		~nuaMatrix();
 		nuaMatrix(const int _rows, const int _cols);
 		T* operator [](const int index);
 		bool multiply(nuaMatrix& lval, nuaMatrix& rval);
@@ -22,6 +23,11 @@ template <class T> nuaMatrix<T>::nuaMatrix():
 	m_cols(0),
 	val(NULL)
 {
+};
+
+template <class T> nuaMatrix<T>::~nuaMatrix()
+{
+	free_all();
 };
 
 template <class T> void nuaMatrix<T>::free_all(void){

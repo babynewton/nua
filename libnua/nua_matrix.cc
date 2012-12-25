@@ -57,6 +57,11 @@ static int matrix_scalar_product(lua_State* L){
 	}
 	nuaMatrix<double>* ret = new nuaMatrix<double>;
 	ret->multiply(**lval, **rval);
+	if (ret->rows() == 1 && ret->cols() == 1){
+		lua_pushnumber(L, *ret[0][0]);
+		delete ret;
+		return 1;
+	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
 }
 
