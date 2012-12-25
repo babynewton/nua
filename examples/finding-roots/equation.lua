@@ -25,6 +25,6 @@ print "a[] is..."
 print(a)
 --It's a simple matrix operation
 local b = x * a
---b is supposed to be [14, 32, 56]
+--b is supposed to be [14, 32, 50]
 print "b[] is..."
 print (b)

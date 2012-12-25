@@ -15,7 +15,7 @@ static int newmatrix(lua_State* L,
 	nuaMatrix<double>** matrix = (nuaMatrix<double>**)lua_newuserdata(L, sizeof(nuaMatrix<double>));
 	luaL_getmetatable(L, LUA_NUAMATRIX);
 	lua_setmetatable(L, -2);
-	*matrix = (val) ? val : nuaMatrixFactory<double>::create(rows, cols);
+	*matrix = (val) ? val : new nuaMatrix<double>(rows, cols);
 	if(!*matrix){
 		lua_pushnil(L);
 		lua_pushstring(L, "Can't allocate a matrix with given dimension");
@@ -55,7 +55,8 @@ static int matrix_scalar_product(lua_State* L){
 		lua_pushstring(L, "r-value is not a matrix");
 		return 2;
 	}
-	nuaMatrix<double>* ret = nuaMatrixFactory<double>::multiplicate(*lval, *rval);
+	nuaMatrix<double>* ret = new nuaMatrix<double>;
+	ret->multiply(**lval, **rval);
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
 }
 
