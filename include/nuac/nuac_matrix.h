@@ -15,7 +15,10 @@ template <class T> class nuaMatrix{
 		~nuaMatrix();
 		nuaMatrix(const int _rows, const int _cols);
 		T* operator [](const int index);
-		bool multiply(nuaMatrix& lval, nuaMatrix& rval);
+		void add(nuaMatrix& lval, nuaMatrix& rval);
+		void substract(nuaMatrix& lval, nuaMatrix& rval);
+		void multiply(nuaMatrix& lval, nuaMatrix& rval);
+		void transpose(nuaMatrix& oval);
 };
 
 template <class T> nuaMatrix<T>::nuaMatrix():
@@ -58,11 +61,44 @@ template <class T> T* nuaMatrix<T>::operator [](const int index){
 	return val[index];
 };
 
-template <class T> bool nuaMatrix<T>::multiply(nuaMatrix& lval, nuaMatrix& rval){
+template <class T> void nuaMatrix<T>::add(nuaMatrix& lval, nuaMatrix& rval){
 	if(val) free_all();
-	if(!lval.rows() || !lval.cols()) return false;
-	if(!rval.rows() || !rval.cols()) return false;
-	if(lval.cols() != rval.rows()) return false;
+	if(!lval.rows() || !lval.cols()) throw "lval is an empty matrix";
+	if(!rval.rows() || !rval.cols()) throw "rval is an empty matrix";
+	if(lval.cols() != rval.cols()) throw "Columns are not identical";
+	if(lval.rows() != rval.rows()) throw "Rows are not identical";
+	m_rows = lval.rows();
+	m_cols = rval.cols();
+	allocate();
+	int cnt = lval.cols();
+	for(int i = 0 ; i < m_rows ; i++){
+		for(int j = 0 ; j < m_cols ; j++){
+			val[i][j] = lval[i][j] + rval[i][j];
+		}
+	}
+};
+
+template <class T> void nuaMatrix<T>::substract(nuaMatrix& lval, nuaMatrix& rval){
+	if(val) free_all();
+	if(!lval.rows() || !lval.cols()) throw "lval is an empty matrix";
+	if(!rval.rows() || !rval.cols()) throw "rval is an empty matrix";
+	if(lval.cols() != rval.rows()) throw "Columns of lval and Rows of rval are not same";
+	m_rows = lval.rows();
+	m_cols = rval.cols();
+	allocate();
+	T value;
+	for(int i = 0 ; i < m_rows ; i++){
+		for(int j = 0 ; j < m_cols ; j++){
+			val[i][j] = lval[i][j] - rval[i][j];
+		}
+	}
+};
+
+template <class T> void nuaMatrix<T>::multiply(nuaMatrix& lval, nuaMatrix& rval){
+	if(val) free_all();
+	if(!lval.rows() || !lval.cols()) throw "lval is an empty matrix";
+	if(!rval.rows() || !rval.cols()) throw "rval is an empty matrix";
+	if(lval.cols() != rval.rows()) throw "Columns of lval and Rows of rval are not same";
 	m_rows = lval.rows();
 	m_cols = rval.cols();
 	allocate();
@@ -77,6 +113,18 @@ template <class T> bool nuaMatrix<T>::multiply(nuaMatrix& lval, nuaMatrix& rval)
 			val[i][j] = value;
 		}
 	}
-	return true;
+};
+
+template <class T> void nuaMatrix<T>::transpose(nuaMatrix& oval){
+	if(val) free_all();
+	if(!oval.rows() || !oval.cols()) throw "val is an empty matrix";
+	m_cols = oval.rows();
+	m_rows = oval.cols();
+	allocate();
+	for(int i = 0 ; i < m_rows ; i++){
+		for(int j = 0 ; j < m_cols ; j++){
+			val[i][j] = oval[j][i];
+		}
+	}
 };
 #endif //__NUAC_MATRIX_H__

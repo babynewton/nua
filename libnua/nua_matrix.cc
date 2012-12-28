@@ -25,6 +25,25 @@ static int newmatrix(lua_State* L,
 	return 1;
 }
 
+static int matrix_transpose(lua_State* L){
+	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*matrix){
+		lua_pushnil(L);
+		lua_pushstring(L, "Not a matrix");
+		return 2;
+	}
+	nuaMatrix<double>* ret = new nuaMatrix<double>;
+	try{
+		ret->transpose(**matrix);
+	} catch(const char* e){
+		delete ret;
+		lua_pushnil(L);
+		lua_pushstring(L, e);
+		return 2;
+	}
+	return newmatrix(L, ret->rows(), ret->cols(), ret);
+}
+
 static int matrix_dump(lua_State* L){
 	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
 	const int args = lua_gettop(L);
@@ -43,7 +62,7 @@ static int matrix_dump(lua_State* L){
 	return 1;
 }
 
-static int matrix_scalar_product(lua_State* L){
+static int matrix_scalar_operation(lua_State* L, const char op){
 	nuaMatrix<double>** lval = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
 	if(!*lval) {
 		lua_pushnil(L);
@@ -57,13 +76,42 @@ static int matrix_scalar_product(lua_State* L){
 		return 2;
 	}
 	nuaMatrix<double>* ret = new nuaMatrix<double>;
-	ret->multiply(**lval, **rval);
+	try{
+		switch(op){
+			case '+':
+				ret->add(**lval, **rval);
+				break;
+			case '-':
+				ret->substract(**lval, **rval);
+				break;
+			case '*':
+				ret->multiply(**lval, **rval);
+				break;
+		}
+	} catch(const char* e){
+		delete ret;
+		lua_pushnil(L);
+		lua_pushstring(L, e);
+		return 2;
+	}
 	if (ret->rows() == 1 && ret->cols() == 1){
 		lua_pushnumber(L, *ret[0][0]);
 		delete ret;
 		return 1;
 	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
+}
+
+static int matrix_add(lua_State* L){
+	return matrix_scalar_operation(L, '+');
+}
+
+static int matrix_sub(lua_State* L){
+	return matrix_scalar_operation(L, '-');
+}
+
+static int matrix_scalar_product(lua_State* L){
+	return matrix_scalar_operation(L, '*');
 }
 
 static int matrix_gc(lua_State* L){
@@ -150,6 +198,8 @@ static int vector_new_row(lua_State* L){
 }
 
 static const luaL_Reg matrix_lib[] = {
+	{"__add", matrix_add},
+	{"__sub", matrix_sub},
 	{"__mul", matrix_scalar_product},
 	{"__gc", matrix_gc},
 	{"__tostring", matrix_tostring},
@@ -160,6 +210,7 @@ static const luaL_Reg matrix_lib[] = {
 
 static const luaL_Reg matrix_api[] = {
 	{"dump", matrix_dump},
+	{"transpose", matrix_transpose},
 	{"new", matrix_new},
 	{"column", vector_new_column},
 	{"row", vector_new_row},
