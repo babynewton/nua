@@ -150,17 +150,17 @@ static int vector_new_row(lua_State* L){
 }
 
 static const luaL_Reg matrix_lib[] = {
-	{"dump", matrix_dump},
 	{"__mul", matrix_scalar_product},
 	{"__gc", matrix_gc},
 	{"__tostring", matrix_tostring},
-	{"__call", matrix_get_at},
-//	{"__newindex", matrix_set_at},
+	{"__index", matrix_get_at},
+	{"__newindex", matrix_set_at},
 	{NULL, NULL}
 };
 
-static const luaL_Reg algebralib[] = {
-	{"matrix", matrix_new},
+static const luaL_Reg matrix_api[] = {
+	{"dump", matrix_dump},
+	{"new", matrix_new},
 	{"column", vector_new_column},
 	{"row", vector_new_row},
 	{NULL, NULL}
@@ -168,8 +168,9 @@ static const luaL_Reg algebralib[] = {
 
 void matrix_init(lua_State* L){
 	luaL_newmetatable(L, LUA_NUAMATRIX);
-	lua_pushvalue(L, -1);
+/*	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
+*/
 	luaL_register(L, NULL, matrix_lib);
-	luaL_register(L, "algebra", algebralib);
+	luaL_register(L, "matrix", matrix_api);
 }
