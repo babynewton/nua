@@ -2,7 +2,8 @@
 #include <sstream>
 #include <lua5.1/lua.h>
 #include <lua5.1/lauxlib.h>
-#include "nua/nua.h"
+#include "nuac/nuac.h"
+#include "nua_vector.h"
 
 using namespace std;
 
@@ -67,7 +68,10 @@ static int matrix_scalar_product(lua_State* L){
 
 static int matrix_gc(lua_State* L){
 	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
-	if(*matrix) delete *matrix;
+	if(*matrix) {
+		delete *matrix;
+		*matrix = NULL;
+	}
 	return 0;
 }
 
@@ -79,8 +83,9 @@ static int matrix_tostring(lua_State* L){
 		return 2;
 	}
 	if((*val)->cols() == 0 || (*val)->rows() == 0){
-		lua_pushstring(L, "empty");
-		return 1;
+		lua_pushnil(L);
+		lua_pushstring(L, "empty matrix");
+		return 2;
 	}
 	string str;
 	stringstream ss;
@@ -102,7 +107,24 @@ static int matrix_tostring(lua_State* L){
 }
 
 static int matrix_get_at(lua_State* L){
-	return 0;
+	nuaMatrix<double>** val = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*val) {
+		lua_pushnil(L);
+		lua_pushstring(L, "It is not a matrix");
+		return 2;
+	}
+	if((*val)->cols() == 0 || (*val)->rows() == 0){
+		lua_pushnil(L);
+		lua_pushstring(L, "empty matrix");
+		return 2;
+	}
+	const int row = luaL_checkinteger(L, 2);
+	if(row < 1 || row > (*val)->rows()){
+		lua_pushnil(L);
+		lua_pushstring(L, "out of range");
+		return 2;
+	}
+	return vector_new(L, (**val)[row - 1], (*val)->cols());
 }
 
 static int matrix_set_at(lua_State* L){
@@ -132,8 +154,8 @@ static const luaL_Reg matrix_lib[] = {
 	{"__mul", matrix_scalar_product},
 	{"__gc", matrix_gc},
 	{"__tostring", matrix_tostring},
-//	{"__index", matrix_get_at},
-	{"__newindex", matrix_set_at},
+	{"__call", matrix_get_at},
+//	{"__newindex", matrix_set_at},
 	{NULL, NULL}
 };
 

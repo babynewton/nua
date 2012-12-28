@@ -74,7 +74,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(lib_lua_5.1dir)"
 LTLIBRARIES = $(lib_lua_5.1_LTLIBRARIES)
 libnua_la_DEPENDENCIES =
-am_libnua_la_OBJECTS = nua.lo nua_matrix.lo
+am_libnua_la_OBJECTS = nua.lo nua_matrix.lo nua_vector.lo
 libnua_la_OBJECTS = $(am_libnua_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -214,7 +214,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_lua_5.1_LTLIBRARIES = libnua.la
 lib_lua_5.1dir = $(prefix)/lib/lua/5.1
-libnua_la_SOURCES = nua.cc nua_matrix.cc
+libnua_la_SOURCES = nua.cc nua_matrix.cc nua_vector.cc
 AM_CPPFLAGS = -I. -I../include
 AM_LDFLAGS = -release 0.1
 libnua_la_LIBADD = -lfl
@@ -295,6 +295,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nua.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nua_matrix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nua_vector.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
