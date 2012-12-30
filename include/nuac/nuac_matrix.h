@@ -12,6 +12,7 @@ template <class T> class nuaMatrix{
 		const int rows(){return m_rows;}
 		const int cols(){return m_cols;}
 		nuaMatrix();
+		nuaMatrix(nuaMatrix<T>& a);
 		~nuaMatrix();
 		nuaMatrix(const int _rows, const int _cols);
 		T* operator [](const int index);
@@ -19,6 +20,8 @@ template <class T> class nuaMatrix{
 		void substract(nuaMatrix& lval, nuaMatrix& rval);
 		void multiply(nuaMatrix& lval, nuaMatrix& rval);
 		void transpose(nuaMatrix& oval);
+		void identify(void);
+		void swap(const int orig, const int dest);
 };
 
 template <class T> nuaMatrix<T>::nuaMatrix():
@@ -28,9 +31,27 @@ template <class T> nuaMatrix<T>::nuaMatrix():
 {
 };
 
+template <class T> nuaMatrix<T>::nuaMatrix(nuaMatrix<T>& a):
+	m_rows(a.rows()),
+	m_cols(a.cols()),
+	val(NULL)
+{
+	allocate();
+	for(int i = 0 ; i < m_rows ; i++)
+		memcpy(val[i], a.val[i], sizeof(T) * m_cols);
+};
+
 template <class T> nuaMatrix<T>::~nuaMatrix()
 {
 	free_all();
+};
+
+template <class T> void nuaMatrix<T>::identify(void){
+	if(!m_rows || !m_cols) throw "An empty matrix";
+	if(m_rows != m_cols) throw "The matrix is not sqare";
+	for(int i = 0 ; i < m_rows ; i++)
+		for(int j = 0 ; j < m_cols ; j++)
+			val[i][j] = (i == j) ? 1 : 0;
 };
 
 template <class T> void nuaMatrix<T>::free_all(void){
@@ -39,7 +60,7 @@ template <class T> void nuaMatrix<T>::free_all(void){
 		if(val[i]) delete val[i];
 	delete val;
 	val = NULL;
-}
+};
 
 template <class T> void nuaMatrix<T>::allocate(void){
 	if(!m_rows || !m_cols) return;
@@ -126,5 +147,12 @@ template <class T> void nuaMatrix<T>::transpose(nuaMatrix& oval){
 			val[i][j] = oval[j][i];
 		}
 	}
+};
+
+template <class T> void nuaMatrix<T>::swap(const int orig, const int dest){
+	if(orig < 0 || dest < 0 || orig >= m_rows || dest >= m_rows) throw "out of bound";
+	T* tmp = val[orig];
+	val[orig] = val[dest];
+	val[dest] = tmp;
 };
 #endif //__NUAC_MATRIX_H__

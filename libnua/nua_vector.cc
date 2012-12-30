@@ -16,7 +16,7 @@ static int vector_get_at(lua_State* L){
 		return 2;
 	}
 	const int index = luaL_checkinteger(L, 2);
-	if(index < 1 || index > (*vector)->len){
+	if(index < 1 || index > (*vector)->len()){
 		lua_pushnil(L);
 		lua_pushstring(L, "out of boundary");
 		return 2;
@@ -33,7 +33,7 @@ static int vector_set_at(lua_State* L){
 		return 2;
 	}
 	const int index = luaL_checkinteger(L, 2);
-	if(index < 1 || index > (*vector)->len){
+	if(index < 1 || index > (*vector)->len()){
 		lua_pushnil(L);
 		lua_pushstring(L, "out of boundary");
 		return 2;
@@ -61,14 +61,14 @@ static int vector_tostring(lua_State* L){
 	}
 	string str;
 	stringstream ss;
-	for(int j = 0 ; j < (*val)->len ; j++){
+	for(int j = 0 ; j < (*val)->len() ; j++){
 		if (j != 0) {
 			ss <<  ", ";
 		} else {
 			ss << "[ ";
 		}
 		ss << (**val)[j];
-		if (j == ((*val)->len - 1)) ss << " ]" << endl;
+		if (j == ((*val)->len() - 1)) ss << " ]" << endl;
 	}
 	str = ss.str();
 	lua_pushstring(L, str.c_str());
@@ -87,7 +87,7 @@ int vector_new(lua_State* L, const double* line, const int len){
 	nuaVector<double>** vector = (nuaVector<double>**)lua_newuserdata(L, sizeof(nuaVector<double>));
 	luaL_getmetatable(L, LUA_NUAVECTOR);
 	lua_setmetatable(L, -2);
-	*vector = new nuaVector<double>(line, len);
+	*vector = new nuaVector<double>((double*)line, len);
 	if(!*vector){
 		lua_pushnil(L);
 		lua_pushstring(L, "Can't allocate a vector with given dimension");

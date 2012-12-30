@@ -1,3 +1,4 @@
+#include <string.h>
 #include <string>
 #include <sstream>
 #include <lua5.1/lua.h>
@@ -42,6 +43,35 @@ static int matrix_transpose(lua_State* L){
 		return 2;
 	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
+}
+
+static int matrix_invert(lua_State* L){
+	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*matrix){
+		lua_pushnil(L);
+		lua_pushstring(L, "Not a matrix");
+		return 2;
+	}
+	const char* algorithm = luaL_optstring(L, 2, "gauss-jordan");
+	nuaMatrix<double>* ret = new nuaMatrix<double>((*matrix)->rows(), (*matrix)->cols());
+	try{
+		ret->identify();
+		if(!strcmp(algorithm, "gauss-jordan")){
+			nuaGaussJordan<double> eliminator;
+			eliminator.invert(**matrix, *ret);
+//		} else if(!strcmp(algorithm, "lu-decomposition")) {
+//			nuaLineaAlgebra<double>::doLUDecomposition(**matrix, *ret);
+		} else{
+			throw "invalid algorithm";
+		}
+	} catch(const char* e){
+		delete ret;
+		lua_pushnil(L);
+		lua_pushstring(L, e);
+		return 2;
+	}
+	return newmatrix(L, ret->rows(), ret->cols(), ret);
+	return 0;
 }
 
 static int matrix_dump(lua_State* L){
@@ -91,6 +121,7 @@ static int matrix_scalar_operation(lua_State* L, const char op){
 	} catch(const char* e){
 		delete ret;
 		lua_pushnil(L);
+		//TODO:e doesn't show up at the script
 		lua_pushstring(L, e);
 		return 2;
 	}
@@ -211,6 +242,7 @@ static const luaL_Reg matrix_lib[] = {
 static const luaL_Reg matrix_api[] = {
 	{"dump", matrix_dump},
 	{"transpose", matrix_transpose},
+	{"invert", matrix_invert},
 	{"new", matrix_new},
 	{"column", vector_new_column},
 	{"row", vector_new_row},
