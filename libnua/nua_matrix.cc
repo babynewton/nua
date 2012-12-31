@@ -74,6 +74,36 @@ static int matrix_invert(lua_State* L){
 	return 0;
 }
 
+static int matrix_determinant(lua_State* L){
+	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*matrix){
+		lua_pushnil(L);
+		lua_pushstring(L, "Not a matrix");
+		return 2;
+	}
+	const char* algorithm = luaL_optstring(L, 2, "laplace");
+	nuaMatrix<double>* ret = new nuaMatrix<double>((*matrix)->rows(), (*matrix)->cols());
+	double determinant;
+	try{
+		ret->identify();
+		if(!strcmp(algorithm, "laplace")){
+			nuaLaplaceDeterminant<double> determinator;
+			determinant = determinator.determinant(**matrix);
+//		} else if(!strcmp(algorithm, "lu-decomposition")) {
+//			nuaLineaAlgebra<double>::doLUDecomposition(**matrix, *ret);
+		} else{
+			throw "invalid algorithm";
+		}
+	} catch(const char* e){
+		delete ret;
+		lua_pushnil(L);
+		lua_pushstring(L, e);
+		return 2;
+	}
+	lua_pushnumber(L, determinant);
+	return 1;
+}
+
 static int matrix_dump(lua_State* L){
 	nuaMatrix<double>** matrix = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
 	const int args = lua_gettop(L);
@@ -242,6 +272,7 @@ static const luaL_Reg matrix_lib[] = {
 static const luaL_Reg matrix_api[] = {
 	{"dump", matrix_dump},
 	{"transpose", matrix_transpose},
+	{"determinant", matrix_determinant},
 	{"invert", matrix_invert},
 	{"new", matrix_new},
 	{"column", vector_new_column},

@@ -37,7 +37,8 @@ template <class T> void nuaGaussJordan<T>::findMax(nuaMatrix<T>& a, T& val, int&
 };
 
 template <class T> void nuaGaussJordan<T>::invert(nuaMatrix<T>& _a, nuaMatrix<T>& b){
-	nuaMatrix<T> a(_a);
+	nuaMatrix<T> a;
+	a.copy(_a);
 	pivot.renew(a.cols());
 	for(int cnt = 0 ; cnt < a.rows() ; cnt++){
 		T val;
@@ -62,5 +63,4 @@ template <class T> void nuaGaussJordan<T>::invert(nuaMatrix<T>& _a, nuaMatrix<T>
 		}
 	}
 };
-
 #endif //__NUAC_LINEAR_ALGEBRA_H__

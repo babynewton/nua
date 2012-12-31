@@ -12,7 +12,6 @@ template <class T> class nuaMatrix{
 		const int rows(){return m_rows;}
 		const int cols(){return m_cols;}
 		nuaMatrix();
-		nuaMatrix(nuaMatrix<T>& a);
 		~nuaMatrix();
 		nuaMatrix(const int _rows, const int _cols);
 		T* operator [](const int index);
@@ -22,6 +21,8 @@ template <class T> class nuaMatrix{
 		void transpose(nuaMatrix& oval);
 		void identify(void);
 		void swap(const int orig, const int dest);
+		void copy(nuaMatrix<T>& a);
+		void subWithout(nuaMatrix<T>& a, const int row, const int col);
 };
 
 template <class T> nuaMatrix<T>::nuaMatrix():
@@ -31,11 +32,9 @@ template <class T> nuaMatrix<T>::nuaMatrix():
 {
 };
 
-template <class T> nuaMatrix<T>::nuaMatrix(nuaMatrix<T>& a):
-	m_rows(a.rows()),
-	m_cols(a.cols()),
-	val(NULL)
-{
+template <class T> void nuaMatrix<T>::copy(nuaMatrix<T>& a) {
+	m_rows = a.rows();
+	m_cols = a.cols();
 	allocate();
 	for(int i = 0 ; i < m_rows ; i++)
 		memcpy(val[i], a.val[i], sizeof(T) * m_cols);
@@ -154,5 +153,23 @@ template <class T> void nuaMatrix<T>::swap(const int orig, const int dest){
 	T* tmp = val[orig];
 	val[orig] = val[dest];
 	val[dest] = tmp;
+};
+
+template <class T> void nuaMatrix<T>::subWithout(nuaMatrix<T>& a, const int row, const int col){
+	if(a.rows() <= 1 || a.cols() <= 1) throw "Too small to get a sub matrix";
+	if(row <= 0 || col <= 0 || row >= a.rows() || col >= a.cols()) throw "out of boundary";
+	m_rows = a.rows() - 1;
+	m_cols = a.cols() - 1;
+	allocate();
+	int sub_i = 0, sub_j = 0;
+	for(int i = 0, sub_i = 0 ; i < a.rows() ; i++){
+		if(i == row) continue;
+		for(int j = 0, sub_j = 0 ; j < a.cols() ; j++){
+			if(j == col) continue;
+			val[sub_i][sub_j] = a[i][j];
+			sub_j++;
+		}
+		sub_i++;
+	}
 };
 #endif //__NUAC_MATRIX_H__
