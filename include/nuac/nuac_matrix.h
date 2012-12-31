@@ -157,7 +157,7 @@ template <class T> void nuaMatrix<T>::swap(const int orig, const int dest){
 
 template <class T> void nuaMatrix<T>::subWithout(nuaMatrix<T>& a, const int row, const int col){
 	if(a.rows() <= 1 || a.cols() <= 1) throw "Too small to get a sub matrix";
-	if(row <= 0 || col <= 0 || row >= a.rows() || col >= a.cols()) throw "out of boundary";
+	if(row < 0 || col < 0 || row >= a.rows() || col >= a.cols()) throw "out of boundary";
 	m_rows = a.rows() - 1;
 	m_cols = a.cols() - 1;
 	allocate();
