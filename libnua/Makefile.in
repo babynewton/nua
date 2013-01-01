@@ -218,7 +218,7 @@ libnua_la_SOURCES = nua.cc nua_matrix.cc nua_vector.cc
 AM_CPPFLAGS = -I. -I../include
 AM_LDFLAGS = -release 0.1
 libnua_la_LIBADD = -lfl
-EXTRA_DIST = nua.cc
+EXTRA_DIST = nua_matrix.h nua_vector.h
 all: all-am
 
 .SUFFIXES:
