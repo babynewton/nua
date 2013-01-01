@@ -223,7 +223,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = libnua libcnua
+SUBDIRS = libnua libcnua examples
 MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in 
 ACLOCAL_AMFLAGS = -I m4
 all: config.h

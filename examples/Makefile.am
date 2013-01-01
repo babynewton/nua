@@ -1,0 +1,9 @@
+exampledir=$(prefix)/share/nua
+example_DATA=../examples/elementary-operation/arithmatic.lua\
+		   ../examples/elementary-operation/determinant.lua\
+		   ../examples/elementary-operation/inv.lua\
+		   ../examples/elementary-operation/setget.lua\
+		   ../examples/elementary-operation/transpose.lua\
+		   ../examples/elementary-operation/wierd_product.lua\
+		   ../examples/finding-roots/equation.lua
+EXTRA_DIST=${example_DATA}

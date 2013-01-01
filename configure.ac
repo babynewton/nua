@@ -21,7 +21,7 @@ AC_CHECK_LIB([fl], [main])
 
 # Checks for header files.
 AC_CHECK_HEADERS([lua5.1/lua.h],,[AC_MSG_ERROR(
-		  [Couldn't find lua.h...Install liblua5.1-0-dev])])
+		  [Could not find lua.h...Install liblua5.1-0-dev])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
@@ -29,5 +29,6 @@ AC_CHECK_HEADERS([lua5.1/lua.h],,[AC_MSG_ERROR(
 
 AC_CONFIG_FILES([Makefile
                  libcnua/Makefile
-                 libnua/Makefile])
+                 libnua/Makefile
+                 examples/Makefile])
 AC_OUTPUT

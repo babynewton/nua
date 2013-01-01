@@ -15720,7 +15720,7 @@ if test "x$ac_cv_header_lua5_1_lua_h" = xyes; then :
 _ACEOF
 
 else
-  as_fn_error $? "Couldn't find lua.h...Install liblua5.1-0-dev" "$LINENO" 5
+  as_fn_error $? "Could not find lua.h...Install liblua5.1-0-dev" "$LINENO" 5
 fi
 
 done
@@ -15730,7 +15730,7 @@ done
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile libcnua/Makefile libnua/Makefile"
+ac_config_files="$ac_config_files Makefile libcnua/Makefile libnua/Makefile examples/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16850,6 +16850,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "libcnua/Makefile") CONFIG_FILES="$CONFIG_FILES libcnua/Makefile" ;;
     "libnua/Makefile") CONFIG_FILES="$CONFIG_FILES libnua/Makefile" ;;
+    "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
