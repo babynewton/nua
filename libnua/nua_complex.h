@@ -21,17 +21,8 @@ freely, subject to the following restrictions:
    distribution.
 */
 
-#include <lua5.1/lua.h>
-#include <lua5.1/lauxlib.h>
-#include "nua_matrix.h"
-#include "nua_vector.h"
-#include "nua_complex.h"
+#ifndef __NUA_COMPLEX_H__
+#define __NUA_COMPLEX_H__
 
-extern "C" {
-LUALIB_API int luaopen_libnua(lua_State* L){
-	matrix_init(L);
-	vector_init(L);
-	complex_init(L);
-	return 1;
-}
-}
+void complex_init(lua_State* L);
+#endif //__NUA_COMPLEX_H__

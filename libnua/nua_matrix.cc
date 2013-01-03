@@ -37,7 +37,7 @@ static int newmatrix(lua_State* L,
 		const int rows,
 		const int cols,
 		nuaMatrix<double>* val = NULL){
-	nuaMatrix<double>** matrix = (nuaMatrix<double>**)lua_newuserdata(L, sizeof(nuaMatrix<double>));
+	nuaMatrix<double>** matrix = (nuaMatrix<double>**)lua_newuserdata(L, sizeof(nuaMatrix<double>*));
 	luaL_getmetatable(L, LUA_NUAMATRIX);
 	lua_setmetatable(L, -2);
 	*matrix = (val) ? val : new nuaMatrix<double>(rows, cols);
@@ -94,7 +94,6 @@ static int matrix_invert(lua_State* L){
 		return 2;
 	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
-	return 0;
 }
 
 static int matrix_determinant(lua_State* L){
