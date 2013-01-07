@@ -62,7 +62,7 @@ static int matrix_transpose(lua_State* L){
 	} catch(const char* e){
 		delete ret;
 		lua_pushnil(L);
-		lua_pushstring(p, e);
+		lua_pushstring(L, e);
 		return 2;
 	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
