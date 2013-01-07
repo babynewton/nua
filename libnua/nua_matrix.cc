@@ -54,7 +54,7 @@ static int matrix_transpose(lua_State* L){
 	if(!*matrix){
 		lua_pushnil(L);
 		lua_pushstring(L, "Not a matrix");
-		return 2;
+		return lua_error(L);
 	}
 	nuaMatrix<double>* ret = new nuaMatrix<double>;
 	try{
@@ -62,7 +62,7 @@ static int matrix_transpose(lua_State* L){
 	} catch(const char* e){
 		delete ret;
 		lua_pushnil(L);
-		lua_pushstring(L, e);
+		lua_pushstring(p, e);
 		return 2;
 	}
 	return newmatrix(L, ret->rows(), ret->cols(), ret);
@@ -147,15 +147,13 @@ static int matrix_dump(lua_State* L){
 static int matrix_scalar_operation(lua_State* L, const char op){
 	nuaMatrix<double>** lval = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
 	if(!*lval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "l-value is not a matrix");
-		return 2;
+		return lua_error(L);
 	}
 	nuaMatrix<double>** rval = (nuaMatrix<double>**)luaL_checkudata(L, 2, LUA_NUAMATRIX);
 	if(!*rval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "r-value is not a matrix");
-		return 2;
+		return lua_error(L);
 	}
 	nuaMatrix<double>* ret = new nuaMatrix<double>;
 	try{
@@ -172,10 +170,9 @@ static int matrix_scalar_operation(lua_State* L, const char op){
 		}
 	} catch(const char* e){
 		delete ret;
-		lua_pushnil(L);
 		//TODO:e doesn't show up at the script
 		lua_pushstring(L, e);
-		return 2;
+		return lua_error(L);
 	}
 	if (ret->rows() == 1 && ret->cols() == 1){
 		lua_pushnumber(L, *ret[0][0]);
