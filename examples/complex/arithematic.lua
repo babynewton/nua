@@ -1,6 +1,7 @@
 require 'libnua'
 a = complex.cartesian(10,1)
 print("a=",a)
+print("-a=",-a)
 ar = complex.cartesian(10,2)
 print("ar=",ar)
 b = a + ar

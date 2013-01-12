@@ -5,7 +5,7 @@ example_DATA=../examples/elementary-operation/arithmatic.lua\
 		   ../examples/elementary-operation/setget.lua\
 		   ../examples/elementary-operation/transpose.lua\
 		   ../examples/elementary-operation/wierd_product.lua\
-		   ../examples/finding-roots/equation.lua\
+		   ../examples/elementary-operation/equation.lua\
 		   ../examples/complex/arithematic.lua\
 		   ../examples/complex/conjugate.lua\
 		   ../examples/complex/element.lua

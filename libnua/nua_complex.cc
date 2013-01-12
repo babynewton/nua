@@ -200,6 +200,16 @@ static int complex_imag(lua_State* L){
 	return 1;
 }
 
+static int complex_unm(lua_State* L){
+	complex<double>** cmplx = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+	if(!*cmplx) {
+		lua_pushnil(L);
+		lua_pushstring(L, "It is not a complex");
+		return 2;
+	}
+	return newcomplex(L, -(*cmplx)->real(), -(*cmplx)->imag());
+}
+
 static int complex_conj(lua_State* L){
 	complex<double>** cmplx = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*cmplx) {
@@ -216,6 +226,7 @@ static const luaL_Reg complex_lib[] = {
 	{"__mul", complex_mul},
 	{"__div", complex_div},
 	{"__gc", complex_gc},
+	{"__unm", complex_unm},
 	{"__tostring", complex_tostring},
 	{NULL, NULL}
 };
