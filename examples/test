@@ -1,0 +1,39 @@
+#!/bin/bash
+
+LUA=lua
+SNAPSHOT=tmp.txt
+PASS=
+FAIL=
+DIFF=diff
+
+for FILE in `find . -name "*.lua"`
+do
+	$LUA $FILE > $SNAPSHOT
+	if [ -z `$DIFF $SNAPSHOT $FILE.txt` ]
+	then
+		PASS+="$FILE "
+	else
+		FAIL+="$FILE "
+	fi
+done
+
+function banner(){
+	echo ==================================
+	echo $1
+	echo ==================================
+}
+
+banner "PASS"
+for ITEM in $PASS
+do
+	echo $ITEM
+done
+echo
+
+banner "FAIL"
+for ITEM in $FAIL
+do
+	echo $ITEM
+done
+echo
+
