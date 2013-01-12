@@ -47,9 +47,8 @@ static int newcomplex(lua_State* L, const double real, const double imag){
 static int complex_add(lua_State* L){
 	complex<double>** lval = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*lval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "It is not a complex");
-		return 2;
+		return lua_error(L);
 	}
 	complex<double>** rval = (complex<double>**)luaL_checkudata(L, 2, LUA_NUACOMPLEX);
 	if(*rval) {
@@ -58,17 +57,15 @@ static int complex_add(lua_State* L){
 		double rv = luaL_checknumber(L, 2);
 		return newcomplex(L, (*lval)->real() + rv, (*lval)->imag());
 	}
-	lua_pushnil(L);
 	lua_pushstring(L, "It is neither a complex nor a number");
-	return 2;
+	return lua_error(L);
 }
 
 static int complex_sub(lua_State* L){
 	complex<double>** lval = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*lval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "It is not a complex");
-		return 2;
+		return lua_error(L);
 	}
 	complex<double>** rval = (complex<double>**)luaL_checkudata(L, 2, LUA_NUACOMPLEX);
 	if(*rval) {
@@ -77,17 +74,15 @@ static int complex_sub(lua_State* L){
 		double rv = luaL_checknumber(L, 2);
 		return newcomplex(L, (*lval)->real() - rv, (*lval)->imag());
 	}
-	lua_pushnil(L);
 	lua_pushstring(L, "It is neither a complex nor a number");
-	return 2;
+	return lua_error(L);
 }
 
 static int complex_mul(lua_State* L){
 	complex<double>** lval = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*lval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "It is not a complex");
-		return 2;
+		return lua_error(L);
 	}
 	complex<double>** rval = (complex<double>**)luaL_checkudata(L, 2, LUA_NUACOMPLEX);
 	if(*rval) {
@@ -98,17 +93,15 @@ static int complex_mul(lua_State* L){
 		complex<double> prod = (**lval) * rv;
 		return newcomplex(L, prod.real(), prod.imag());
 	}
-	lua_pushnil(L);
 	lua_pushstring(L, "It is neither a complex nor a number");
-	return 2;
+	return lua_error(L);
 }
 
 static int complex_div(lua_State* L){
 	complex<double>** lval = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*lval) {
-		lua_pushnil(L);
 		lua_pushstring(L, "It is not a complex");
-		return 2;
+		return lua_error(L);
 	}
 	complex<double>** rval = (complex<double>**)luaL_checkudata(L, 2, LUA_NUACOMPLEX);
 	if(*rval) {
@@ -119,9 +112,8 @@ static int complex_div(lua_State* L){
 		complex<double> prod = (**lval) / rv;
 		return newcomplex(L, prod.real(), prod.imag());
 	}
-	lua_pushnil(L);
 	lua_pushstring(L, "It is neither a complex nor a number");
-	return 2;
+	return lua_error(L);
 }
 
 static int complex_gc(lua_State* L){
@@ -136,9 +128,8 @@ static int complex_gc(lua_State* L){
 static int complex_tostring(lua_State* L){
 	complex<double>** cmplx = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
 	if(!*cmplx) {
-		lua_pushnil(L);
 		lua_pushstring(L, "It is not a complex");
-		return 2;
+		return lua_error(L);
 	}
 	lua_pushfstring(L, "%f%s%fj", (*cmplx)->real(), (((*cmplx)->imag() >= 0) ? "+" : ""), (*cmplx)->imag());
 	return 1;
