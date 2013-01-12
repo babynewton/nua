@@ -13,3 +13,6 @@ print(c)
 d=a-b
 print("d[]=a-b is...")
 print(d)
+print("-a[] is...")
+print(-a)
+

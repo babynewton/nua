@@ -206,6 +206,27 @@ static int matrix_gc(lua_State* L){
 	return 0;
 }
 
+static int matrix_unm(lua_State* L){
+	nuaMatrix<double>** val = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
+	if(!*val) {
+		lua_pushnil(L);
+		lua_pushstring(L, "It is not a matrix");
+		return 2;
+	}
+	if((*val)->cols() == 0 || (*val)->rows() == 0){
+		lua_pushnil(L);
+		lua_pushstring(L, "empty matrix");
+		return 2;
+	}
+	nuaMatrix<double>* ret = new nuaMatrix<double>((*val)->rows(), (*val)->cols());
+	for(int i = 0 ; i < (*val)->rows() ; i++){
+		for(int j = 0 ; j < (*val)->cols() ; j++){
+			(*ret)[i][j] = -(**val)[i][j];
+		}
+	}
+	return newmatrix(L, ret->rows(), ret->cols(), ret);
+}
+
 static int matrix_tostring(lua_State* L){
 	nuaMatrix<double>** val = (nuaMatrix<double>**)luaL_checkudata(L, 1, LUA_NUAMATRIX);
 	if(!*val) {
@@ -288,6 +309,7 @@ static const luaL_Reg matrix_lib[] = {
 	{"__tostring", matrix_tostring},
 	{"__index", matrix_get_at},
 	{"__newindex", matrix_set_at},
+	{"__unm", matrix_unm},
 	{NULL, NULL}
 };
 
