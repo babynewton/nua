@@ -26,12 +26,14 @@ freely, subject to the following restrictions:
 #include "nua_matrix.h"
 #include "nua_vector.h"
 #include "nua_complex.h"
+#include "nua_math.h"
 
 extern "C" {
 LUALIB_API int luaopen_libnua(lua_State* L){
 	matrix_init(L);
 	vector_init(L);
 	complex_init(L);
+	math_init(L);
 	return 1;
 }
 }
