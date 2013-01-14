@@ -11,15 +11,16 @@
 #define lmathlib_c
 #define LUA_LIB
 
-#include "lua.h"
+#include <complex>
+#include <lua5.1/lua.h>
+#include <lua5.1/lauxlib.h>
 
-#include "lauxlib.h"
-#include "lualib.h"
+#include "nua_complex.h"
+
+#define RADIANS_PER_DEGREE (M_PI/180.0)
 
 
-#define RADIANS_PER_DEGREE (PI/180.0)
-
-
+using namespace std;
 
 static int math_abs (lua_State *L) {
   lua_pushnumber(L, fabs(luaL_checknumber(L, 1)));
@@ -27,31 +28,61 @@ static int math_abs (lua_State *L) {
 }
 
 static int math_sin (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=sin(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_sinh (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=sinh(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_cos (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=cos(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_cosh (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=cosh(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_tan (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=tan(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_tanh (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=tanh(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
   return 1;
 }
@@ -100,6 +131,11 @@ static int math_modf (lua_State *L) {
 }
 
 static int math_sqrt (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=sqrt(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
   return 1;
 }
@@ -110,16 +146,31 @@ static int math_pow (lua_State *L) {
 }
 
 static int math_log (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=log(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, log(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_log10 (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=log10(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
   return 1;
 }
 
 static int math_exp (lua_State *L) {
+  complex<double>** val = (complex<double>**)luaL_checkudata(L, 1, LUA_NUACOMPLEX);
+  if(*val){
+    complex<double>nv=exp(**val);
+    return newcomplex(L, nv.real(), nv.imag());
+  }
   lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
   return 1;
 }

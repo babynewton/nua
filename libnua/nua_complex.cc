@@ -26,11 +26,11 @@ freely, subject to the following restrictions:
 #include <lua5.1/lua.h>
 #include <lua5.1/lauxlib.h>
 
-#define LUA_NUACOMPLEX "nuaComplex*"
+#include "nua_complex.h"
 
 using namespace std;
 
-static int newcomplex(lua_State* L, const double real, const double imag){
+int newcomplex(lua_State* L, const double real, const double imag){
 	complex<double>** cmplx = (complex<double>**)lua_newuserdata(L, sizeof(complex<double>));
 	luaL_getmetatable(L, LUA_NUACOMPLEX);
 	lua_setmetatable(L, -2);

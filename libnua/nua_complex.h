@@ -24,5 +24,7 @@ freely, subject to the following restrictions:
 #ifndef __NUA_COMPLEX_H__
 #define __NUA_COMPLEX_H__
 
+#define LUA_NUACOMPLEX "nuaComplex*"
+int newcomplex(lua_State* L, const double real, const double imag);
 void complex_init(lua_State* L);
 #endif //__NUA_COMPLEX_H__
